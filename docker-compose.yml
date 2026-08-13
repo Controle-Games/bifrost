@@ -33,7 +33,7 @@ services:
       - ./sql/init.sql:/init.sql
     networks:
       - internal_network
-    entreypoint: >
+    entrypoint: >
       /bin/bash -c "
       echo 'Aguardando inicializacao do schema...';
       /opt/mssql-tools/bin/sqlcmd -S sqlserver -U sa -P 'YourStrong@Passw0rd2026!' -C -i /init.sql;
@@ -53,6 +53,8 @@ services:
     depends_on:
       sqlserver:
         condition: service_healthy
+      db-init:
+        condition: service_completed_successfully # API só sobe após o db-init rodar com sucesso!
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
       interval: 10s
