@@ -1,0 +1,29 @@
+name: Bifrost CI Pipeline
+
+on:
+  push:
+    branches: [ "main", "feature/**" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout do Código
+      uses: actions/checkout@v4
+
+    - name: Configurar SDK do .NET 10
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+
+    - name: Restaurar Dependências
+      run: dotnet restore
+
+    - name: Compilar Solução
+      run: dotnet build --no-restore -c Release
+
+    - name: Validar Sintaxe do docker Compose
+      run: docker compose config

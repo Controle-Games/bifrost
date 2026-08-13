@@ -22,10 +22,28 @@ services:
     networks:
       - internal_network
 
+  # Container utilitário temporário para execução da carga inicial de DDL
+  db-init:
+    image: mcr.microsoft.com/mssql/tools:latest
+    container_name: bifrost_db_init
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    volumes:
+      - ./sql/init.sql:/init.sql
+    networks:
+      - internal_network
+    entreypoint: >
+      /bin/bash -c "
+      echo 'Aguardando inicializacao do schema...';
+      /opt/mssql-tools/bin/sqlcmd -S sqlserver -U sa -P 'YourStrong@Passw0rd2026!' -C -i /init.sql;
+      echo 'Banco de dados de tabelas criados com sucesso!';
+      "
+
   api:
     build:
-      context: ./src/IngestionApi
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: src/Bifrost.IngestionApi/Dockerfile
     container_name: bifrost_api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
