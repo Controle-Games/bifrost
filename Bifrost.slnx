@@ -7,4 +7,7 @@
     <Project Path="src/Bifrost.Dashboard/Bifrost.Dashboard.csproj" />
     <Project Path="src/Bifrost.IngestionApi/Bifrost.IngestionApi.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Bifrost.Agent.Tests/Bifrost.Agent.Tests.csproj" />
+  </Folder>
 </Solution>
