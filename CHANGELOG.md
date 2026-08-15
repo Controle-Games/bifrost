@@ -23,6 +23,16 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ---
 
+## [0.2.0] - 2026-08-14
+
+### Added
+- **Agent**: Implementado o leitor de histórico `SqliteBrowserHistoryReader` para navegadores Chromium (Chrome, Edge, Brave) e Firefox via SQLite.
+- **Agent**: Adicionado suporte à varredura e leitura dinâmica de múltiplos perfis de usuário (`Default`, `Profile 1`, etc.) no Chromium.
+- **Tests**: Criado o projeto `Bifrost.Agent.Tests` com suíte de testes unitários utilizando **xUnit** e **Shouldly**.
+
+### Changed
+- **Agent**: Otimizado o manuseio de arquivos SQLite temporários com `Mode=ReadOnly;Cache=Shared` e liberação de pools de conexão para prevenir travamentos no sistema operacional.
+
 ## [0.1.0] - 2026-08-12
 
 ### 🚀 Adicionado (Added)
