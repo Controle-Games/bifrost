@@ -16,7 +16,7 @@ public class SqliteBrowserHistoryReaderTests : IDisposable
 
     public SqliteBrowserHistoryReaderTests()
     {
-        _tempDirectory = Path.Combine(Path.GetTempPath(), $"bifrost_test_{Guid.NewGuid():N}");
+        _tempDirectory = Path.Combine(Path.GetTempPath(), $"bifrost_sqlite_reader_test_{Guid.NewGuid():N}");
         Directory.CreateDirectory(_tempDirectory);
         _loggerMock = new Mock<ILogger<SqliteBrowserHistoryReader>>();
     }
@@ -33,7 +33,7 @@ public class SqliteBrowserHistoryReaderTests : IDisposable
     [Fact]
     public async Task ReadHistoryAsync_WhenDirectoriesDoNotExist_ShouldReturnEmptyList()
     {
-        // Arrange
+        // ARRANGE
         var options = Options.Create(new BrowserOptions
         {
             Chrome = new BrowserProfileConfig { RelativePath = "Chrome", FileName = "History" },
@@ -44,17 +44,17 @@ public class SqliteBrowserHistoryReaderTests : IDisposable
 
         var reader = new SqliteBrowserHistoryReader(options, _loggerMock.Object);
 
-        // Act
+        // ACT
         var result = await reader.ReadHistoryAsync();
 
-        // Assert
+        // ASSERT
         result.ShouldBeEmpty();
     }
 
     [Fact]
     public async Task ReadChromiumHistoryAsync_WithValidSqliteDatabase_ShouldMapToDtosCorrectly()
     {
-        // Arrange: Prepara uma estrutura fake no diretório temp imitando a pasta do Chrome
+        // ARRANGE: Prepara uma estrutura fake no diretório temp imitando a pasta do Chrome
         var chromeUserData = Path.Combine(_tempDirectory, "ChromeUserData");
         var defaultProfile = Path.Combine(chromeUserData, "Default");
         Directory.CreateDirectory(defaultProfile);
@@ -72,10 +72,10 @@ public class SqliteBrowserHistoryReaderTests : IDisposable
 
         var reader = new SqliteBrowserHistoryReader(options, _loggerMock.Object);
 
-        // Act
+        // ACT
         var result = await reader.ReadHistoryAsync();
 
-        // Assert
+        // ASSERT
         var historyList = result.ToList();
         historyList.ShouldNotBeEmpty();
 
