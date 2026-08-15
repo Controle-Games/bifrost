@@ -22,6 +22,12 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 - **Documentação:** Arquivos `README.md` com arquitetura/guia de execução e `CHANGELOG.md`.
 
 ---
+## [0.3.0] - 2026-08-15
+
+### Added
+- **Agent**: Criado o repositório de estado `JsonStateRepository` para persistência local em arquivo JSON (`agent_state.json`).
+- **Agent**: Implementado o serviço `HistoryProcessor` para orquestração do controle de delta, garantindo o envio apenas de novos registros por navegador/perfil.
+- **Tests**: Adicionados testes unitários para o `JsonStateRepository` e para a lógica de filtragem de delta no `HistoryProcessor`.
 
 ## [0.2.0] - 2026-08-14
 
