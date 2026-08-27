@@ -9,6 +9,18 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-08-27
+
+### 🚀 Adicionado (Added)
+*   **Agent**: Adicionado suporte à leitura de diretivas de GPO do Active Directory diretamente através do Registro do Windows (`HKLM\SOFTWARE\Policies\Bifrost`).
+*   **Tests**: Implementada suíte de testes unitários isolados para o `BifrostWorker` utilizando **NSubstitute**.
+
+### 🔧 Alterado (Changed)
+*   **Agent**: Refatorado o ciclo principal do `BifrostWorker` para utilizar as configurações dinâmicas de tempo de varredura (`BrowserOptions`) e as interfaces injetadas de processamento.
+
+--- 
+## [0.4.0] - 2026-08-26
+
 ### 🚀 Adicionado (Added)
 - **Estrutura de Solução (.NET 10):** Criação do arquivo de solução `Bifrost.sln` agrupando os projetos:
   - `Bifrost.Shared`: Biblioteca de classes para DTOs e contratos comuns.
@@ -29,6 +41,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 - **Agent**: Implementado o serviço `HistoryProcessor` para orquestração do controle de delta, garantindo o envio apenas de novos registros por navegador/perfil.
 - **Tests**: Adicionados testes unitários para o `JsonStateRepository` e para a lógica de filtragem de delta no `HistoryProcessor`.
 
+---
 ## [0.2.0] - 2026-08-14
 
 ### Added
@@ -39,6 +52,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 ### Changed
 - **Agent**: Otimizado o manuseio de arquivos SQLite temporários com `Mode=ReadOnly;Cache=Shared` e liberação de pools de conexão para prevenir travamentos no sistema operacional.
 
+---
 ## [0.1.0] - 2026-08-12
 
 ### 🚀 Adicionado (Added)

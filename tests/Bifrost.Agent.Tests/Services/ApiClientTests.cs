@@ -2,6 +2,7 @@ using System.Net;
 using System.Text.Json;
 using Bifrost.Agent.Services;
 using Bifrost.Shared.DTOs;
+using Bifrost.Shared.Enums;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Moq.Protected;

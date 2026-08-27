@@ -1,6 +1,7 @@
 using Bifrost.Agent.Models;
 using Bifrost.Agent.Services;
 using Bifrost.Shared.DTOs;
+using Bifrost.Shared.Enums;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Shouldly;
