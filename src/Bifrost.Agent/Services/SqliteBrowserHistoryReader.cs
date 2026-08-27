@@ -1,6 +1,7 @@
 using System.Data;
 using Bifrost.Agent.Configuration;
 using Bifrost.Shared.DTOs;
+using Bifrost.Shared.Enums;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Options;
 

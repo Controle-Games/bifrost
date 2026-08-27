@@ -1,3 +1,5 @@
+using Bifrost.Shared.Enums;
+
 namespace Bifrost.Shared.DTOs;
 
 public record BrowserHistoryItemDto(

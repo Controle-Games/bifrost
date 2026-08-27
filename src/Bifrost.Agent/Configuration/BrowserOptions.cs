@@ -4,6 +4,7 @@ public class BrowserOptions
 {
     public const string SectionName = "BrowserOptions";
 
+    public int IntervalInMinutes { get; set; } = 5;
     public BrowserProfileConfig Chrome { get; set; } = new();
     public BrowserProfileConfig Edge { get; set; } = new();
     public BrowserProfileConfig Firefox { get; set; } = new();

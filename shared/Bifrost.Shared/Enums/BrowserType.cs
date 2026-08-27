@@ -1,4 +1,4 @@
-namespace Bifrost.Shared.DTOs;
+namespace Bifrost.Shared.Enums;
 
 public enum BrowserType
 {
