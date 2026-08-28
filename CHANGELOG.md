@@ -9,6 +9,11 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-08-28
+### 🚀 Adicionado (Added)
+*   **Dashboard (Métricas Reais):** Integração completa da tela de Visão Geral (`Overview.tsx`) com a Ingestion API, passando a carregar métricas consolidadas e atividades recentes em tempo real.
+*   **Dashboard (Gráficos Dinâmicos):** Implementação do cálculo percentual automatizado para distribuição dos navegadores monitorados (Chrome, Edge, Firefox, etc.) diretamente dos dados coletados.
+
 ## [0.7.0] - 2026-08-28
 ### 🚀 Adicionado (Added)
 *   **Dashboard (Busca e Filtros):** Implementação de busca textual dinâmica com debounce de 500ms na tela de Auditoria (`AuditLog.tsx`).
