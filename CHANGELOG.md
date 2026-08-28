@@ -9,6 +9,15 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-08-28
+
+### 🚀 Adicionado (Added)
+*   **Dashboard (React + Vite):** Recriação do projeto `Bifrost.Dashboard` utilizando a stack **React + Vite + TypeScript** [2], substituindo o template C# anterior.
+*   **Dashboard (Interface):** Estilização completa com **Tailwind CSS v4** e **Font Awesome 6**, incluindo um menu de navegação dinâmico com o ícone de arco-íris (Bifrost) 🌈.
+*   **Dashboard (Telas):** Implementação da tela de **Visão Geral (`Overview.tsx`)** com cards de métricas e gráficos de navegadores, e da tela de **Logs de Auditoria (`AuditLog.tsx`)** com busca textual e filtros dinâmicos de usuário e máquina.
+*   **Dashboard (Configurações):** Criação do serviço cliente de API (`src/services/api.ts`) preparado para ler variáveis de ambiente via arquivos `.env` e `.env.development`.
+
+
 ## [0.5.0] - 2026-08-27
 
 ### 🚀 Adicionado (Added)

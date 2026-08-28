@@ -4,7 +4,6 @@
   </Folder>
   <Folder Name="/src/">
     <Project Path="src/Bifrost.Agent/Bifrost.Agent.csproj" />
-    <Project Path="src/Bifrost.Dashboard/Bifrost.Dashboard.csproj" />
     <Project Path="src/Bifrost.IngestionApi/Bifrost.IngestionApi.csproj" />
   </Folder>
   <Folder Name="/tests/">
