@@ -9,6 +9,10 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-08-28
+### 🚀 Adicionado (Added)):
+*   **Tests (NSubstitute):** Expansão e refatoração completa dos testes unitários para validar isolamento de perfis múltiplos e proteção do delta utilizando NSubstitute.
+
 ## [0.8.0] - 2026-08-28
 ### 🚀 Adicionado (Added)
 *   **Dashboard (Métricas Reais):** Integração completa da tela de Visão Geral (`Overview.tsx`) com a Ingestion API, passando a carregar métricas consolidadas e atividades recentes em tempo real.

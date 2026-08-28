@@ -1,70 +1,67 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
 using Bifrost.Agent.Services;
 using Bifrost.Shared.DTOs;
 using Bifrost.Shared.Enums;
 using Microsoft.Extensions.Logging.Abstractions;
-using Moq;
-using Moq.Protected;
 using Shouldly;
+using Xunit;
 
 namespace Bifrost.Agent.Tests.Services;
 
-public class ApiClassTests
+// Handler customizado simples para capturar requisições HTTP sem depender de hacks de mock protegido
+public class FakeHttpMessageHandler : HttpMessageHandler
 {
-    private readonly Mock<HttpMessageHandler> _httpMessageHandlerMock = new();
+    private readonly Func<HttpRequestMessage, Task<HttpResponseMessage>> _sendAsyncFunc;
 
-    private HttpClient CreateMockHttpClient(HttpResponseMessage response)
+    public FakeHttpMessageHandler(Func<HttpRequestMessage, Task<HttpResponseMessage>> sendAsyncFunc)
     {
-        _httpMessageHandlerMock
-            .Protected()
-            .Setup<Task<HttpResponseMessage>>(
-                "SendAsync",
-                ItExpr.IsAny<HttpRequestMessage>(),
-                ItExpr.IsAny<CancellationToken>()
-            )
-            .ReturnsAsync(response);
-
-        return new HttpClient(_httpMessageHandlerMock.Object)
-        {
-            BaseAddress = new Uri("https://api.bifrost.local/")
-        };
+        _sendAsyncFunc = sendAsyncFunc;
     }
 
+    protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+    {
+        return _sendAsyncFunc(request);
+    }
+}
+
+public class ApiClassTests
+{
     [Fact]
     public async Task SendHistoryBatchAsync_WhenApiReturnsSuccess_ShouldReturnSuccessResponse()
     {
-        // Arrange
-        var expectedResponse = new SyncHistoryResponseDto
-        {
-            Success = true,
-            ProcessedCount = 1,
-            Message = "Lote processado"
-        };
-
+        // ARRANGE
+        var expectedResponse = new SyncHistoryResponseDto { Success = true, ProcessedCount = 1, Message = "Lote processado" };
         var httpResponse = new HttpResponseMessage(HttpStatusCode.OK)
         {
             Content = new StringContent(JsonSerializer.Serialize(expectedResponse))
         };
 
-        var httpClient = CreateMockHttpClient(httpResponse);
+        var handler = new FakeHttpMessageHandler(req => Task.FromResult(httpResponse));
+        var httpClient = new HttpClient(handler) { BaseAddress = new Uri("https://api.bifrost.local/") };
         var apiClient = new ApiClient(httpClient, NullLogger<ApiClient>.Instance);
 
         var items = new[]
         {
             new BrowserHistoryItemDto(
-                Url: "https://success.return",
-                Title: "API-SUCCESS-RETURN",
-                VisitedAtUtc: DateTime.UtcNow,
-                Browser: BrowserType.Chrome,
-                ProfileName: "Default"
+                "https://success.return",
+                "API-SUCCESS-RETURN",
+                DateTime.UtcNow,
+                BrowserType.Chrome,
+                "Default"
             )
         };
 
-        // Act
+        // ACT
         var result = await apiClient.SendHistoryBatchAsync(items);
 
-        // Assert
+        // ASSERT
         result.ShouldNotBeNull();
         result.Success.ShouldBeTrue();
         result.ProcessedCount.ShouldBe(1);
@@ -73,30 +70,31 @@ public class ApiClassTests
     [Fact]
     public async Task SendHistoryBatchAsync_WhenApiReturns500InternalServerError_ShouldReturnFailedResponse()
     {
-        // Arrange
+        // ARRANGE
         var httpResponse = new HttpResponseMessage(HttpStatusCode.InternalServerError)
         {
             Content = new StringContent("Erro interno do servidor")
         };
 
-        var httpClient = CreateMockHttpClient(httpResponse);
+        var handler = new FakeHttpMessageHandler(req => Task.FromResult(httpResponse));
+        var httpClient = new HttpClient(handler) { BaseAddress = new Uri("https://api.bifrost.local/") };
         var apiClient = new ApiClient(httpClient, NullLogger<ApiClient>.Instance);
 
         var items = new[]
         {
             new BrowserHistoryItemDto(
-                Url: "https://internal-server-error.return",
-                Title: "Intertal Server Error",
-                VisitedAtUtc: DateTime.UtcNow,
-                Browser: BrowserType.Chrome,
-                ProfileName: "Default"
+                "https://internal-server-error.return",
+                "Internal Server Error",
+                DateTime.UtcNow,
+                BrowserType.Chrome,
+                "Default"
             )
         };
 
-        // Act
+        // ACT
         var result = await apiClient.SendHistoryBatchAsync(items);
 
-        // Assert
+        // ASSERT
         result.ShouldNotBeNull();
         result.Success.ShouldBeFalse();
         result.Message.ShouldNotBeNull();
@@ -106,25 +104,23 @@ public class ApiClassTests
     [Fact]
     public async Task SendHistoryBatchAsync_WhenEmptyListPassed_ShouldReturnEarlyWithoutHttpCall()
     {
-        // Arrange
-        var httpClient = CreateMockHttpClient(new HttpResponseMessage(HttpStatusCode.OK));
+        // ARRANGE
+        var httpCallMade = false;
+        var handler = new FakeHttpMessageHandler(req =>
+        {
+            httpCallMade = true;
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK));
+        });
+
+        var httpClient = new HttpClient(handler) { BaseAddress = new Uri("https://api.bifrost.local/") };
         var apiClient = new ApiClient(httpClient, NullLogger<ApiClient>.Instance);
 
-        // Act
+        // ACT
         var result = await apiClient.SendHistoryBatchAsync(Enumerable.Empty<BrowserHistoryItemDto>());
 
-        // Assert
+        // ASSERT
         result.Success.ShouldBeTrue();
         result.ProcessedCount.ShouldBe(0);
-
-        // Garante que o handler HTTP nem foi chamado
-        _httpMessageHandlerMock
-            .Protected()
-            .Verify(
-                "SendAsync",
-                Times.Never(),
-                ItExpr.IsAny<HttpRequestMessage>(),
-                ItExpr.IsAny<CancellationToken>()
-            );
+        httpCallMade.ShouldBeFalse(); // Garante que nenhuma chamada externa foi disparada
     }
 }
